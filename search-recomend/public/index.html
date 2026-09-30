@@ -48,12 +48,22 @@
           <div class="coluna-titulo">Balcão 1 · Busca por palavra-chave</div>
           <div class="coluna-sub">tradicional</div>
         </div>
+        <div class="coluna-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Ambos</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:#4a6fa5"></span> Apenas keyword</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas LAYA</span>
+        </div>
         <div class="grid" id="grid-keyword"></div>
       </div>
       <div class="coluna" id="coluna-laya">
         <div class="coluna-header">
           <div class="coluna-titulo">Balcão 2 · Busca com LAYA</div>
           <div class="coluna-sub">inteligência local</div>
+        </div>
+        <div class="coluna-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Ambos</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:#4a6fa5"></span> Apenas keyword</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas LAYA</span>
         </div>
         <div class="grid" id="grid-laya"></div>
       </div>
@@ -71,6 +81,18 @@
         <button id="inspectorClose">✕</button>
       </div>
       <div class="inspector-body" id="inspectorBody"></div>
+    </div>
+
+    <div class="catalog-trigger">
+      <button id="catalogBtn">Ver catálogo completo</button>
+    </div>
+
+    <div class="catalog-full" id="catalogFull" style="display:none">
+      <div class="catalog-header">
+        <div class="catalog-title">Catálogo Completo</div>
+        <div class="catalog-sub">120 artigos</div>
+      </div>
+      <div class="grid catalog-grid" id="catalogGrid"></div>
     </div>
   </div>
 

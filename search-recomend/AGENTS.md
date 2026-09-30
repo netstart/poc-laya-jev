@@ -20,6 +20,7 @@ Todas as especificações, arquitetura, regras, tarefas e orientações deste pr
 |---|---|
 | `.ai/spec/001-prompt-busca-que-entende.md` | Especificação completa da aplicação **Busca que Entende** — substituição do JEV pelo LAYA, arquitetura local, stack, frontend, backend, testes, scripts de execução, benchmarks, critérios de aceitação e ordem de implementação. |
 | `.ai/spec/002-especificacao-interface-busca-comparativa.md` | Detalhamento do comportamento da interface de busca comparativa entre busca tradicional e busca com LAYA, incluindo regras de identificação de itens em cada coluna. |
+| `.ai/spec/003-legendas-resultados-busca-comparativa.md` | Especificação das legendas explicativas por lado, significados de cores, números, badges e comportamento separado das colunas. |
 | `.ai/fix/002-fix-balcao2-laya-scoring.md` | Plano de correção para o Balcão 2 — LAYA retornando 0 boas opções. |
 
 ### 3.2 Como Usar
