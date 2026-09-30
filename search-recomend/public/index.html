@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busca que Entende</title>
+  <link rel="stylesheet" href="busca.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=Figtree:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="capa">
+    <div class="capa-inner">
+      <div class="selo">CATÁLOGO GERAL · 120 ARTIGOS</div>
+      <h1 class="titulo">Busca que Entende</h1>
+      <p class="subtitulo">O catálogo dos anos 70, agora com inteligência local.</p>
+      <form id="searchForm" autocomplete="off">
+        <div class="input-wrap">
+          <input id="q" type="text" placeholder="presente pra minha mãe que ama jardinagem até 150 reais" autocomplete="off">
+          <button id="btnBuscar" type="submit">Buscar</button>
+        </div>
+      </form>
+      <div class="exemplos">
+        <div class="exemplos-label">BUSCAS DE EXEMPLO</div>
+        <div class="exemplos-list" id="exemplosList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resultados" id="resultados" style="display:none">
+    <div class="contadores">
+      <div class="contador" id="balcao1">
+        <div class="contador-titulo">Balcão 1 · Busca por palavra-chave</div>
+        <div class="contador-num" id="balcao1Num">—</div>
+        <div class="contador-sub">tradicional</div>
+      </div>
+      <div class="contador" id="balcao2">
+        <div class="contador-titulo">Balcão 2 · Busca com LAYA</div>
+        <div class="contador-num" id="balcao2Num">—</div>
+        <div class="contador-sub">inteligência local</div>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="footer" id="footer"></div>
+
+    <div class="inspector-trigger">
+      <button id="inspectorBtn">🔍 Ver o que o Laya vê</button>
+    </div>
+
+    <div class="inspector" id="inspector" style="display:none">
+      <div class="inspector-header">
+        <span>O que o Laya recebeu e respondeu</span>
+        <button id="inspectorClose">✕</button>
+      </div>
+      <div class="inspector-body" id="inspectorBody"></div>
+    </div>
+  </div>
+
+  <script src="keyword.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
