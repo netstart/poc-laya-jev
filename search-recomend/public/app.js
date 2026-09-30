@@ -46,22 +46,48 @@ document.getElementById("q").addEventListener("input", e => {
   if (q.length >= 3) debouncedSearch(q);
 });
 
+function createTile(producto, source, rank, level = 0) {
+  const div = document.createElement("div");
+  div.className = `tile lv${level} ${source}`;
+  div.id = `tile-${source}-${producto.id}`;
+  const sourceLabels = {
+    "source-both": "Encontrado em ambos",
+    "source-keyword": "Encontrado apenas na busca tradicional",
+    "source-laya": "Encontrado apenas na busca com LAYA"
+  };
+  div.title = sourceLabels[source] || "";
+  let html = `<div class="tile-id">${producto.id}</div>`;
+  html += `<div class="tile-nome">${producto.nombre}</div>`;
+  html += `<div class="tile-preco">R$ ${producto.precio.toFixed(2)}</div>`;
+  if (rank) {
+    html += `<div class="tile-badge">${rank}</div>`;
+  }
+  div.innerHTML = html;
+  return div;
+}
+
 async function doSearch(q) {
   currentQuery = q;
   const resultados = document.getElementById("resultados");
   resultados.style.display = "block";
   resultados.scrollIntoView({ behavior: "smooth", block: "start" });
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+
+  const gridKeyword = document.getElementById("grid-keyword");
+  const gridLaya = document.getElementById("grid-laya");
+  gridKeyword.innerHTML = "";
+  gridLaya.innerHTML = "";
   document.getElementById("footer").innerHTML = "";
 
-  const tiles = catalogo.map(p => {
-    const div = document.createElement("div");
-    div.className = "tile lv0";
-    div.id = `tile-${p.id}`;
-    div.innerHTML = `<div class="tile-id">${p.id}</div><div class="tile-nome">${p.nombre}</div><div class="tile-preco">R$ ${p.precio.toFixed(2)}</div>`;
-    grid.appendChild(div);
-    return div;
+  const keywordIds = ks.search(q, 20);
+  const balcao1 = document.getElementById("balcao1Num");
+  balcao1.textContent = keywordIds.length > 0 ? `${keywordIds.length} resultados` : "0 resultados";
+
+  const keywordProducts = keywordIds.map(id => catalogo.find(p => p.id === id)).filter(Boolean);
+  const keywordIdSet = new Set(keywordIds);
+
+  keywordProducts.forEach((p, idx) => {
+    const tile = createTile(p, "source-keyword", idx + 1, 0);
+    gridKeyword.appendChild(tile);
   });
 
   try {
@@ -71,94 +97,76 @@ async function doSearch(q) {
       body: JSON.stringify({ q, fresh: false }),
     });
     const data = await res.json();
+    if (data.q !== currentQuery) return;
     if (!data.ok) {
       document.getElementById("footer").innerHTML = `<div class="nada-serve">${JSON.stringify(data)}</div>`;
       return;
     }
     currentLayaResult = data;
-    renderLaya(data);
-    renderKeyword(q);
-    renderInspector(data);
+
+    const scores = data.scores || {};
+    const ordem = data.ordem || [];
+    const entendimento = data.entendimiento || {};
+    const orcamentoMax = entendimento.orcamento_max;
+
+    const within = ordem.filter(id => {
+      const p = catalogo.find(x => x.id === id);
+      return p && (orcamentoMax == null || p.precio <= orcamentoMax);
+    });
+    const good = within.filter(id => (scores[id] ? scores[id][0] : 0) >= 2);
+    document.getElementById("balcao2Num").textContent = `${Math.max(0, good.length)} boas opções`;
+
+    const bothIds = new Set(ordem.filter(id => keywordIdSet.has(id)));
+
+    bothIds.forEach(id => {
+      const tile = document.getElementById(`tile-source-keyword-${id}`);
+      if (tile) {
+        tile.classList.add("source-both");
+        tile.classList.remove("source-keyword");
+      }
+    });
+
+    const top = within.slice(0, 8);
+    top.forEach((id, idx) => {
+      const p = catalogo.find(x => x.id === id);
+      if (!p) return;
+      const s = scores[id] ? scores[id][0] : 0;
+      const lv = Math.max(0, Math.min(3, Math.round(s)));
+      const source = bothIds.has(id) ? "source-both" : "source-laya";
+      const tile = createTile(p, source, idx < 5 ? idx + 1 : null, lv);
+      gridLaya.appendChild(tile);
+    });
+
+    const over = ordem.filter(id => {
+      const p = catalogo.find(x => x.id === id);
+      return p && orcamentoMax != null && p.precio > orcamentoMax && (scores[id] ? scores[id][0] : 0) >= 1.5;
+    }).slice(0, 3);
+
+    let footer = document.getElementById("footer");
+    if (over.length > 0 && orcamentoMax != null) {
+      footer.innerHTML = `<div class="over-budget"><div class="over-budget-titulo">Também combinam, mas passam de R$ ${orcamentoMax.toFixed(2)}:</div>` +
+        over.map(id => {
+          const p = catalogo.find(x => x.id === id);
+          return p ? `<div class="over-budget-item"><span>${p.nombre}</span><span>R$ ${p.precio.toFixed(2)}</span></div>` : "";
+        }).join("") + `</div>`;
+    }
+
+    if (within.length > 0 && good.length === 0) {
+      footer.innerHTML = `<div class="nada-serve">Nada no catálogo atende bem a este pedido. O LAYA prefere dizer isso a empurrar qualquer coisa — abaixo, o que chega mais perto.</div>`;
+    }
+
+    renderInspector(data, keywordIds);
   } catch (e) {
     document.getElementById("footer").innerHTML = `<div class="nada-serve">Erro na busca: ${e.message}</div>`;
   }
 }
 
-function renderKeyword(q) {
-  const ids = ks.search(q, 20);
-  const balcao1 = document.getElementById("balcao1Num");
-  if (ids.length === 0) {
-    balcao1.textContent = "0 resultados";
-  } else {
-    balcao1.textContent = `${ids.length} resultados`;
-  }
-  ids.forEach((id, idx) => {
-    const tile = document.getElementById(`tile-${id}`);
-    if (tile) {
-      tile.classList.add("hot");
-      const badge = document.createElement("div");
-      badge.className = "tile-badge";
-      badge.textContent = idx + 1;
-      tile.appendChild(badge);
-    }
-  });
-}
-
-function renderLaya(data) {
-  const scores = data.scores || {};
-  const ordem = data.ordem || [];
-  const entendimento = data.entendimiento || {};
-  const orcamentoMax = entendimento.orcamento_max;
-
-  const within = ordem.filter(id => {
-    const p = catalogo.find(x => x.id === id);
-    return p && (orcamentoMax == null || p.precio <= orcamentoMax);
-  });
-  const top = within.slice(0, 8);
-  const good = within.filter(id => (scores[id] ? scores[id][0] : 0) >= 2);
-  document.getElementById("balcao2Num").textContent = `${Math.max(0, good.length)} boas opções`;
-
-  top.forEach((id, idx) => {
-    const tile = document.getElementById(`tile-${id}`);
-    if (!tile) return;
-    const s = scores[id] ? scores[id][0] : 0;
-    const lv = Math.max(0, Math.min(3, Math.round(s)));
-    tile.className = `tile lv${lv}`;
-    if (idx < 5) {
-      const badge = document.createElement("div");
-      badge.className = "tile-badge";
-      badge.textContent = idx + 1;
-      tile.appendChild(badge);
-    }
-    if (orcamentoMax != null && catalogo.find(x => x.id === id)?.precio > orcamentoMax) {
-      tile.classList.add("over");
-    }
-  });
-
-  const over = ordem.filter(id => {
-    const p = catalogo.find(x => x.id === id);
-    return p && orcamentoMax != null && p.precio > orcamentoMax && (scores[id] ? scores[id][0] : 0) >= 1.5;
-  }).slice(0, 3);
-
-  let footer = document.getElementById("footer");
-  if (over.length > 0 && orcamentoMax != null) {
-    footer.innerHTML = `<div class="over-budget"><div class="over-budget-titulo">Também combinam, mas passam de R$ ${orcamentoMax.toFixed(2)}:</div>` +
-      over.map(id => {
-        const p = catalogo.find(x => x.id === id);
-        return p ? `<div class="over-budget-item"><span>${p.nombre}</span><span>R$ ${p.precio.toFixed(2)}</span></div>` : "";
-      }).join("") + `</div>`;
-  }
-
-  if (within.length > 0 && good.length === 0) {
-    footer.innerHTML = `<div class="nada-serve">Nada no catálogo atende bem a este pedido. O LAYA prefere dizer isso a empurrar qualquer coisa — abaixo, o que chega mais perto.</div>`;
-  }
-}
-
-function renderInspector(data) {
+function renderInspector(data, keywordIds) {
   const body = document.getElementById("inspectorBody");
   body.innerHTML = `
     <div class="inspector-section"><h4>Estado</h4><pre>${JSON.stringify({ pedido_do_cliente: data.q }, null, 2)}</pre></div>
-    <div class="inspector-section"><h4>Entendimento</h4><pre>${JSON.stringify(data.entendimiento, null, 2)}</pre></div>
+    <div class="inspector-section"><h4>Busca Tradicional</h4><pre>resultados: ${keywordIds.length}\nids: [${keywordIds.slice(0, 10).join(", ")}${keywordIds.length > 10 ? "..." : ""}]</pre></div>
+    <div class="inspector-section"><h4>Entendimento LAYA</h4><pre>${JSON.stringify(data.entendimiento, null, 2)}</pre></div>
     <div class="inspector-section"><h4>Métricas</h4><pre>latency: ${data.latency_ms}ms\nchamadas: ${data.n_chamadas}\nperguntas: ${data.n_perguntas}</pre></div>
   `;
 }

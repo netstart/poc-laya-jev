@@ -42,17 +42,32 @@
       </div>
     </div>
 
-    <div class="grid" id="grid"></div>
+    <div class="columns">
+      <div class="coluna" id="coluna-keyword">
+        <div class="coluna-header">
+          <div class="coluna-titulo">Balcão 1 · Busca por palavra-chave</div>
+          <div class="coluna-sub">tradicional</div>
+        </div>
+        <div class="grid" id="grid-keyword"></div>
+      </div>
+      <div class="coluna" id="coluna-laya">
+        <div class="coluna-header">
+          <div class="coluna-titulo">Balcão 2 · Busca com LAYA</div>
+          <div class="coluna-sub">inteligência local</div>
+        </div>
+        <div class="grid" id="grid-laya"></div>
+      </div>
+    </div>
 
     <div class="footer" id="footer"></div>
 
     <div class="inspector-trigger">
-      <button id="inspectorBtn">🔍 Ver o que o Laya vê</button>
+      <button id="inspectorBtn">🔍 Ver detalhes da busca</button>
     </div>
 
     <div class="inspector" id="inspector" style="display:none">
       <div class="inspector-header">
-        <span>O que o Laya recebeu e respondeu</span>
+        <span>Detalhes da busca comparativa</span>
         <button id="inspectorClose">✕</button>
       </div>
       <div class="inspector-body" id="inspectorBody"></div>
