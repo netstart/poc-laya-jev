@@ -9,9 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 def _norm(text: str) -> str:
+    """
+    Normaliza texto removendo acentos e convertendo para lowercase.
+    Usa NFD para decompor caracteres acentuados, depois remove não-ASCII.
+    Ex: "café" -> "cafe", "PRESENTE" -> "presente"
+    """
     return unicodedata.normalize("NFD", text.lower()).encode("ascii", "ignore").decode("ascii")
 
 
+# Mapa de sinônimos bidirecional para expansão de vocabulário.
+# Chave = termo canônico (inglês/pt), Valor = lista de sinônimos/variantes em PT.
+# Usado em _expand_synonyms para encontrar correspondências semânticas além do match exato.
 SYNONYM_MAP = {
     "gift": ["presente", "presentear", "presentinho", "present", "presente"],
     "present": ["presente", "presentear", "presentinho", "gift"],
@@ -48,6 +56,12 @@ SYNONYM_MAP = {
 
 
 def _expand_synonyms(tokens: set[str]) -> set[str]:
+    """
+    Expande conjunto de tokens adicionando sinônimos do SYNONYM_MAP.
+    Para cada token, se ele for uma chave ou estiver na lista de sinônimos,
+    adiciona a chave e todos os sinônimos associados ao conjunto expandido.
+    Retorna novo set com tokens originais + sinônimos.
+    """
     expanded = set(tokens)
     for token in list(tokens):
         for key, syns in SYNONYM_MAP.items():
@@ -58,6 +72,12 @@ def _expand_synonyms(tokens: set[str]) -> set[str]:
 
 
 def _simple_stem(word: str) -> str:
+    """
+    Stemming simples para português: remove sufixos comuns.
+    Lista de sufixos verbais, nominais e adjetivais em ordem de prioridade.
+    Só remove sufixo se a palavra for maior que sufixo + 2 chars (evita over-stemming).
+    Ex: "comprando" -> "compr", "resistente" -> "resist", "bonitinho" -> "bonit"
+    """
     suffixes = [
         "ando", "endo", "indo", "acao", "acoes", "mente",
         "inho", "inha", "ao", "oes", "mente", "mente",
@@ -70,6 +90,12 @@ def _simple_stem(word: str) -> str:
 
 
 def _tokenize(text: str) -> list[str]:
+    """
+    Tokeniza texto: normaliza, split por whitespace, remove stopwords e tokens curtos.
+    Stopwords incluem artigos, preposições, pronomes (PT + EN).
+    Filtra tokens com len <= 1 para remover ruído (ex: "a", "o", "e").
+    Retorna lista de tokens limpos para matching semântico.
+    """
     norm = _norm(text)
     tokens = norm.split()
     stopwords = {
@@ -96,6 +122,11 @@ def _tokenize(text: str) -> list[str]:
     }
     return [t for t in tokens if t not in stopwords and len(t) > 1]
 
+
+# Dicionários de palavras-chave para classificação semântica baseada em regras.
+# Cada chave = categoria/intentão canônica, valor = lista de termos que ativam essa categoria.
+# Usados no fallback simulado (_understand_query_sim e _score_products_sim)
+# quando o modelo LAYA real não está disponível.
 
 INTENT_KEYWORDS = {
     "presente": [
@@ -219,13 +250,35 @@ OCASION_KEYWORDS = {
 
 
 class LayaEngine:
+    """
+    Motor de decisão LAYA para busca semântica de produtos.
+    
+    Suporta dois modos:
+    1. Real: usa pacote `laya` (laya-multilingual) para inferência neural local
+    2. Simulado: fallback baseado em regras (keyword matching + sinônimos + stemming)
+    
+    A classe tenta carregar o modelo real na inicialização; se falhar, usa simulação.
+    Métodos públicos (understand_query, score_products) roteiam automaticamente pro modo ativo.
+    """
     def __init__(self, checkpoint: str = "laya-multilingual", device: str = "cpu"):
+        """
+        Inicializa engine LAYA.
+        
+        Args:
+            checkpoint: nome do modelo (padrão: "laya-multilingual")
+            device: device de inferência ("cpu" ou "cuda")
+        """
         self.checkpoint = checkpoint
         self.device = device
         self._model = None
         self._load_model()
 
     def _load_model(self) -> None:
+        """
+        Tenta carregar modelo LAYA do pacote instalado.
+        Se falhar (pacote não instalado, erro de load), loga warning e mantém _model=None
+        para ativar modo simulado.
+        """
         try:
             import laya
             self._model = laya.load(self.checkpoint, device=self.device)
@@ -235,11 +288,31 @@ class LayaEngine:
             self._model = None
 
     def understand_query(self, query: str) -> Entendimiento:
+        """
+        Extrai intenção estruturada da query do usuário.
+        
+        Roteia para implementação real (modelo LAYA) ou simulada (regras).
+        
+        Returns:
+            Entendimiento com: intenção, categoria, destinatário, ocasião, orçamento, confiança.
+        """
         if self._model is not None:
             return self._understand_query_real(query)
         return self._understand_query_sim(query)
 
     def _understand_query_sim(self, query: str) -> Entendimiento:
+        """
+        Fallback simulado: classifica query usando dicionários de palavras-chave.
+        
+        Pipeline:
+        1. Normaliza + tokeniza query
+        2. Expande com sinônimos (_expand_synonyms)
+        3. Match por prioridade nos dicionários: INTENT -> CAT -> DEST -> OCASION
+        4. Extrai orçamento via parse_budget (app/orcamento.py)
+        5. Retorna Entendimiento com confiança fixa 0.8
+        
+        A ordem dos dicionários define prioridade (primeiro match vence).
+        """
         q = _norm(query)
         q_tokens = set(_tokenize(query))
         q_syns = _expand_synonyms(q_tokens)
@@ -285,17 +358,49 @@ class LayaEngine:
         )
 
     def score_products(self, query: str, productos: list[Producto]) -> list[ScoreProducto]:
+        """
+        Ranqueia produtos conforme relevância para a query.
+        
+        Roteia para implementação real (modelo LAYA) ou simulada (scoring heurístico).
+        
+        Args:
+            query: consulta do usuário
+            productos: lista de produtos candidatos
+            
+        Returns:
+            Lista de ScoreProducto com score (0-3), probabilidades por classe, confiança.
+        """
         if self._model is not None:
             return self._score_products_real(query, productos)
         return self._score_products_sim(query, productos)
 
     def _score_products_sim(self, query: str, productos: list[Producto]) -> list[ScoreProducto]:
+        """
+        Scoring heurístico baseado em overlap léxico + categorias + tags.
+        
+        Pipeline por produto:
+        1. Normaliza + tokeniza query e produto (nome + descrição + tags)
+        2. Expande ambos com sinônimos
+        3. Computa stems para match morfológico
+        4. Calcula score composto:
+           - word_match: tokens exatos em comum (peso 0.5)
+           - syn_match: sinônimos em comum (peso 0.4)
+           - stem_match: stems em comum (peso 0.3)
+           - category bonus: produto em categoria detectada na query (+1.0)
+           - recipient bonus: produto para público detectado (+0.5)
+           - tag_match: tags do produto em query expandida (peso 0.5)
+        5. Clampa score em [0, 3]
+        6. Floor mínimo: se há algum match lexical ou categoria, score >= 1.0
+        7. Gera probabilidades sintéticas para 4 classes (0-3) baseadas no score
+        8. Confiança = score_normalizado (score/3)
+        """
         q_tokens = set(_tokenize(query))
         q_syns = _expand_synonyms(q_tokens)
         q_all = q_tokens | q_syns
         q_stems = {_simple_stem(t) for t in q_all}
         q_wordset = set(q_all)
 
+        # Detecta categorias e destinatários da query para bonus
         cat_matches = set()
         recip_matches = set()
         for cat, keywords in CAT_KEYWORDS.items():
@@ -335,12 +440,14 @@ class LayaEngine:
 
             score = min(3.0, max(0.0, score))
 
+            # Floor: evita score 0 quando há evidência léxica ou categórica
             if score < 1.0 and (word_match > 0 or syn_match > 0 or p.categoria in cat_matches):
                 score = 1.0
 
             if score == 0.0 and p.categoria in cat_matches:
                 score = 0.5
 
+            # Probabilidades sintéticas para 4 classes de relevância
             probs = {"0": max(0.0, 1.0 - score / 3.0), "1": max(0.0, score * 0.3), "2": max(0.0, score * 0.3), "3": max(0.0, score * 0.4)}
             total = sum(probs.values())
             if total > 0:
@@ -351,6 +458,16 @@ class LayaEngine:
         return results
 
     def _understand_query_real(self, query: str) -> Entendimiento:
+        """
+        Inferência real via modelo LAYA (laya-multilingual).
+        
+        Envia query + schema de perguntas (choice) pro modelo decidir.
+        Perguntas cobrem: intenção, categoria, destinatário, ocasião, faixa de orçamento.
+        Orçamento numérico ainda usa parse_budget local (regex) pois LAYA não extrai valores.
+        
+        Em caso de erro (modelo falha, timeout, etc), loga erro e cai pro simulado.
+        Confiança fixa 0.9 para decisões do modelo real.
+        """
         try:
             state = {"query": query}
             questions = [
@@ -372,6 +489,16 @@ class LayaEngine:
             return self._understand_query_sim(query)
 
     def _score_products_real(self, query: str, productos: list[Producto]) -> list[ScoreProducto]:
+        """
+        Scoring real via modelo LAYA em batch.
+        
+        Para cada produto, monta state com query + nome + descrição.
+        Pergunta: "Quão bem o produto X atende ao pedido do cliente?"
+        Modelo retorna score (0-3), probabilidades por classe, confiança.
+        Usa decide_batch para eficiência (uma chamada pro batch todo).
+        
+        Em caso de erro, loga e cai pro scoring simulado.
+        """
         try:
             batch = []
             for p in productos:
