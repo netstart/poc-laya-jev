@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=Figtree:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-  <aside class="catalog-sidebar" id="catalogSidebar">
+  <aside class="catalog-sidebar" id="catalogSidebar" aria-label="Catálogo completo — 120 artigos">
     <div class="catalog-sidebar-header">
       <div class="catalog-sidebar-title">CATÁLOGO</div>
       <div class="catalog-sidebar-sub" id="catalogSidebarSub"></div>
@@ -78,10 +78,10 @@
             <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas no LAYA</span>
           </div>
           <div class="legend-levels">
-            <span class="legend-level"><span class="legend-swatch lv0"></span> lv0</span>
-            <span class="legend-level"><span class="legend-swatch lv1"></span> lv1</span>
-            <span class="legend-level"><span class="legend-swatch lv2"></span> lv2</span>
-            <span class="legend-level"><span class="legend-swatch lv3"></span> lv3</span>
+            <span class="legend-level" title="Irrelevante"><span class="legend-swatch lv0"></span> lv0</span>
+            <span class="legend-level" title="Talvez"><span class="legend-swatch lv1"></span> lv1</span>
+            <span class="legend-level" title="Boa opção"><span class="legend-swatch lv2"></span> lv2</span>
+            <span class="legend-level" title="Perfeito"><span class="legend-swatch lv3"></span> lv3</span>
           </div>
           <div class="legend-note">Números = posição no ranking LAYA · Fundo = nível de score (lv0–lv3)</div>
         </div>
@@ -95,10 +95,23 @@
       <button id="inspectorBtn">🔍 Ver detalhes da busca</button>
     </div>
 
+    <div class="inspector-trigger">
+      <button id="payloadBtn">📦 Ver payload dos balcões</button>
+    </div>
+
+    <div class="payload-display" id="payloadDisplay" style="display:none;">
+      <div class="payload-column">
+        <div class="payload-container" id="payload-balcao1"></div>
+      </div>
+      <div class="payload-column">
+        <div class="payload-container" id="payload-balcao2"></div>
+      </div>
+    </div>
+
     <div class="inspector" id="inspector" style="display:none">
       <div class="inspector-header">
         <span>Detalhes da busca comparativa</span>
-        <button id="inspectorClose">✕</button>
+        <button id="inspectorClose" aria-label="Fechar inspetor">✕</button>
       </div>
       <div class="inspector-body" id="inspectorBody"></div>
     </div>

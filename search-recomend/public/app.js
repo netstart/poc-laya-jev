@@ -4,6 +4,7 @@ let catalogo = [];
 let debounceTimer = null;
 let currentQuery = "";
 let currentLayaResult = null;
+let currentKeywordIds = [];
 
 async function init() {
   const [catRes, exRes] = await Promise.all([
@@ -58,6 +59,7 @@ function createTile(producto, source, rank, level = 0) {
     "source-laya": "Encontrado apenas na busca com LAYA"
   };
   div.title = sourceLabels[source] || "";
+  div.setAttribute("aria-label", sourceLabels[source] || "");
   let html = `<div class="tile-id">${producto.id}</div>`;
   html += `<div class="tile-nome">${producto.nombre}</div>`;
   html += `<div class="tile-preco">R$ ${producto.precio.toFixed(2)}</div>`;
@@ -65,6 +67,10 @@ function createTile(producto, source, rank, level = 0) {
     html += `<div class="tile-badge">${rank}</div>`;
   }
   div.innerHTML = html;
+  if (rank) {
+    const badge = div.querySelector('.tile-badge');
+    if (badge) badge.setAttribute('aria-label', `Posição ${rank} no ranking LAYA`);
+  }
   return div;
 }
 
@@ -121,6 +127,7 @@ async function doSearch(q) {
   document.getElementById("footer").innerHTML = "";
 
   const keywordIds = ks.search(q, 20);
+  currentKeywordIds = keywordIds;
   const balcao1 = document.getElementById("balcao1Num");
   balcao1.textContent = keywordIds.length > 0 ? `${keywordIds.length} resultados` : "0 resultados";
 
@@ -211,6 +218,55 @@ function renderInspector(data, keywordIds) {
     <div class="inspector-section"><h4>Entendimento LAYA</h4><pre>${JSON.stringify(data.entendimiento, null, 2)}</pre></div>
     <div class="inspector-section"><h4>Métricas</h4><pre>latency: ${data.latency_ms}ms\nchamadas: ${data.n_chamadas}\nperguntas: ${data.n_perguntas}</pre></div>
   `;
+  renderPayloads(data, keywordIds);
+}
+
+function renderPayloads(data, keywordIds) {
+  const payload1 = document.getElementById("payload-balcao1");
+  const payload2 = document.getElementById("payload-balcao2");
+
+  const balcao1Data = {
+    query: data.q,
+    tipo: "busca_tradicional",
+    total_resultados: keywordIds.length,
+    ids_encontrados: keywordIds,
+    timestamp: new Date().toISOString()
+  };
+
+  const scores = data.scores || {};
+  const ordem = data.ordem || [];
+  const entendimiento = data.entendimiento || {};
+  const orcamentoMax = entendimiento.orcamento_max;
+
+  const within = ordem.filter(id => {
+    const p = catalogo.find(x => x.id === id);
+    return p && (orcamentoMax == null || p.precio <= orcamentoMax);
+  });
+  const good = within.filter(id => (scores[id] ? scores[id][0] : 0) >= 2);
+  const over = ordem.filter(id => {
+    const p = catalogo.find(x => x.id === id);
+    return p && orcamentoMax != null && p.precio > orcamentoMax && (scores[id] ? scores[id][0] : 0) >= 1.5;
+  }).slice(0, 3);
+
+  const balcao2Data = {
+    query: data.q,
+    tipo: "busca_laya",
+    entendimiento: entendimiento,
+    scores_brutos: scores,
+    ordem_ranking: ordem,
+    itens_dentro_orcamento: within,
+    boas_opcoes: good,
+    itens_acima_orcamento_relevantes: over,
+    metricas: {
+      latency_ms: data.latency_ms,
+      n_chamadas: data.n_chamadas,
+      n_perguntas: data.n_perguntas
+    },
+    timestamp: new Date().toISOString()
+  };
+
+  payload1.innerHTML = `<h4>Payload Balcão 1 · Busca Tradicional</h4><pre>${JSON.stringify(balcao1Data, null, 2)}</pre>`;
+  payload2.innerHTML = `<h4>Payload Balcão 2 · Busca com LAYA</h4><pre>${JSON.stringify(balcao2Data, null, 2)}</pre>`;
 }
 
 document.getElementById("inspectorBtn").addEventListener("click", () => {
@@ -219,7 +275,17 @@ document.getElementById("inspectorBtn").addEventListener("click", () => {
 });
 
 document.getElementById("inspectorClose").addEventListener("click", () => {
-  document.getElementById("inspector").style.display = "none";
-});
+   document.getElementById("inspector").style.display = "none";
+ });
+
+ document.getElementById("payloadBtn").addEventListener("click", () => {
+   const payloadDisplay = document.getElementById("payloadDisplay");
+   const isVisible = payloadDisplay.style.display === "grid";
+   
+   payloadDisplay.style.display = isVisible ? "none" : "grid";
+   
+   const btn = document.getElementById("payloadBtn");
+   btn.textContent = isVisible ? "📦 Ver payload dos balcões" : "📦 Ocultar payload dos balcões";
+ });
 
 init();

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T00:00:00Z",
+  "title": "Design System: Busca que Entende",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Paper Cream", "canonical": "#fffef5", "tonalRamp": ["#faf7f2", "#f5efe0", "#efe9d1", "#e9e2c1", "#e3dac1", "#ddd4b1", "#d7cfb1", "#d1c9a1", "#cbca92", "#c5c082", "#bfb273", "#b9ae64", "#b3aa55", "#ad9f47", "#a79039", "#a18a2b", "#9b8017", "#958609", "#8f7c0b", "#89740d"] },
+      "cream": { "role": "neutral", "displayName": "Cream Background", "canonical": "#fdf6e3", "tonalRamp": ["#fdedc7", "#fbe6ab", "#fad98f", "#f9cc73", "#f8bf57", "#f7b13b", "#f5a11f", "#f39103", "#f18000", "#ef6e00", "#ed5c00", "#eb4900", "#e93800", "#e62700", "#e41600", "#e10500", "#de0400", "#dc0000", "#d90000", "#d60000"] },
+      "ink": { "role": "ink", "displayName": "Deep Ink", "canonical": "#2a2218", "tonalRamp": ["#0d0a07", "#1c1509", "#2c1e0b", "#3b250d", "#4b2d0f", "#5c3511", "#6c3e13", "#7d4515", "#8e4d17", "#9f5419", "#af5b1b", "#b16a1d", "#b27f1f", "#b48f21", "#b59f23", "#b7af25", "#b9c027", "#bbc029", "#c0d02b", "#c2d02d", "#c4e02f"] },
+      "muted": { "role": "neutral", "displayName": "Muted Brown", "canonical": "#6b5e4f", "tonalRamp": ["#403b32", "#5a514b", "#6b5e4f", "#7e6f59", "#8e7e5f", "#9e8e65", "#ae9d6b", "#bdac71", "#cdb977", "#dcc87d", "#ead784", "#f1dc8b", "#f7dc92", "#fbe999", "#fcee9f", "#fffbb6", "#fff9cc", "#fff9de", "#fff6ef", "#fff5f9"] },
+      "border": { "role": "border", "displayName": "Tan Border", "canonical": "#d6c9b1", "tonalRamp": ["#c2b59c", "#bea388", "#ba9f75", "#b69b62", "#b29750", "#af9440", "#ab9033", "#a78c28", "#a48820", "#a08419", "#9c8014", "#987c10", "#95780b", "#917308", "#8d6e05", "#896902", "#856500", "#825000", "#7e4b00", "#7a4500"] },
+      "accent": { "role": "primary", "displayName": "Terracotta Accent", "canonical": "#b85c38", "tonalRamp": ["#713d0d", "#8a4d14", "#a25d1c", "#b85c38", "#c26d3e", "#cc7d44", "#d48d4a", "#da9d51", "#e1ae57", "#e7be5e", "#edcf66", "#f3df6d", "#f9ee74", "#fffc7b", "#fff982", "#fff789", "#fff590", "#fff397", "#fff1fe", "#fffeff"] },
+      "accent2": { "role": "secondary", "displayName": "Forest Secondary", "canonical": "#2f5f4f", "tonalRamp": ["#0c1a15", "#17352e", "#204037", "#2f5f4f", "#3a6d5a", "#477d66", "#538770", "#60927b", "#6d9c86", "#7ba791", "#87b29c", "#94bda7", "#a0c8b2", "#ace3bd", "#b9edd8", "#c5f8c3", "#d2f7af", "#def7ac", "#eaf7a8", "#f7f7b3"] },
+      "hot": { "role": "alert", "displayName": "Hot Red", "canonical": "#c9302c", "tonalRamp": ["#7e1c0c", "#8f2d0f", "#a13d11", "#b24c13", "#c45c15", "#c56d17", "#c67d19", "#c78e1c", "#c89e1e", "#c9af21", "#c9c024", "#cac126", "#cbc229", "#cdca2c", "#ceca30", "#cfca33", "#d0ca37", "#d0cb3a", "#d1cb3e", "#d2ca41"] },
+      "ok": { "role": "semantic", "displayName": "Found Both", "canonical": "#4a7c59", "tonalRamp": ["#152f1f", "#224c29", "#2e5e34", "#3a6f3f", "#477c49", "#539654", "#60b05f", "#6cbd6a", "#7ac875", "#86d680", "#92d48b", "#9ed396", "#a9d1a1", "#b5d0ab", "#c0ddb6", "#cbdbbf", "#d7dac9", "#e2dbc4", "#eed7be", "#f8d3b8"] },
+      "over": { "role": "warning", "displayName": "Over Budget", "canonical": "#7a5c58", "tonalRamp": ["#2e2321", "#483d37", "#51443e", "#594f45", "#63594c", "#6b635f", "#726d71", "#7a7784", "#818388", "#89848c", "#909690", "#979794", "#9e9999", "#a59a9d", "#adab9f", "#b4b2a1", "#bbbaaa", "#c2c4b4", "#cacac8", "#d0d1d0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero titles and page headlines" },
+      "body": { "displayName": "Body", "purpose": "Tile content, descriptions, inspector text" }
+    },
+    "shadows": [
+      {
+        "name": "card-shadow",
+        "value": "4px 4px 0 rgba(42,34,24,0.08)",
+        "purpose": "Main cards, contadores, inspector, sidebar, columns - the primary depth system"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for all state transitions and interactive elements"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Mobile breakpoint: collapses sidebar to top, single column layout"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Result Tile (catalog item)",
+      "kind": "card",
+      "refersTo": "tile",
+      "description": "Square tile representing a product in catalog search results with level-based background and semantic border colors",
+      "html": "<div class=\"ds-tile ds-tile-lv2\">\n  <div class=\"ds-tile-id\">p001</div>\n  <div class=\"ds-tile-nome\">Produto exemplo de jardim</div>\n  <div class=\"ds-tile-preco\">R$ 99,99</div>\n  <div class=\"ds-tile-badge\">2</div>\n</div>",
+      "css": ".ds-tile { aspect-ratio: 1 / 1; background: #f5edd8; border: 1px solid #d6c9b1; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; position: relative; border-left: 3px solid #4a7c59; }\n.ds-tile-lv2 { background: #f5edd8; border-left-color: #4a7c59; }\n.ds-tile-lv3 { background: #fad2a0; border-left-color: #b85c38; }\n.ds-tile-lv1 { background: #f5edd8; border-left-color: #4a7c59; }\n.ds-tile-lv0 { background: #ece8dc; border-left-color: #6b5e4f; }\n.ds-tile .ds-tile-id { font-family: \"Bricolage Grotesque\", sans-serif; font-size: 11px; color: #6b5e4f; }\n.ds-tile .ds-tile-nome { font-size: 12px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }\n.ds-tile .ds-tile-preco { font-family: \"Bricolage Grotesque\", sans-serif; font-weight: 700; font-size: 13px; }\n.ds-tile .ds-tile-badge { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background: #2a2218; color: #fff; display: flex; align-items: center; justify-content: center; font-family: \"Bricolage Grotesque\", sans-serif; font-size: 12px; font-weight: 700; }"
+    },
+    {
+      "name": "Stat Card (Contador)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Stat card used in result counters showing numbers with labels and subtitles",
+      "html": "<div class=\"ds-card\">\n  <div class=\"ds-card-titulo\">Balcão 1 · Busca por palavra-chave</div>\n  <div class=\"ds-card-num\">4 resultados</div>\n  <div class=\"ds-card-sub\">tradicional</div>\n</div>",
+      "css": ".ds-card { background: #fffef5; border: 1px solid #d6c9b1; padding: 18px; box-shadow: 4px 4px 0 rgba(42,34,24,0.08); }\n.ds-card-titulo { font-family: \"Bricolage Grotesque\", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px; color: #6b5e4f; margin-bottom: 6px; }\n.ds-card-num { font-family: \"Bricolage Grotesque\", sans-serif; font-size: 34px; font-weight: 700; }\n.ds-card-sub { font-size: 13px; color: #6b5e4f; }"
+    },
+    {
+      "name": "Comparison Column",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Two-column comparison layout for keyword vs LAYA search results",
+      "html": "<div class=\"ds-column-wrapper\">\n  <div class=\"ds-coluna\">\n    <div class=\"ds-coluna-header\">\n      <div class=\"ds-coluna-titulo\">Balcão 1 · Busca por palavra-chave</div>\n      <div class=\"ds-coluna-sub\">tradicional</div>\n    </div>\n    <div class=\"ds-coluna-legend\">\n      <div class=\"ds-legend-text\">Resultados por correspondência de palavras.</div>\n      <div class=\"ds-legend-items\">\n        <span class=\"ds-legend-item\">\n          <span class=\"ds-legend-swatch\" style=\"background:#4a7c59\"></span>\n          Encontrado em ambos\n        </span>\n        <span class=\"ds-legend-item\">\n          <span class=\"ds-legend-swatch\" style=\"background:#4a6fa5\"></span>\n          Apenas na busca tradicional\n        </span>\n      </div>\n    </div>\n    <div class=\"ds-grid\" id=\"grid-keyword\"></div>\n  </div>\n  <div class=\"ds-coluna\">\n    <div class=\"ds-coluna-header\">\n      <div class=\"ds-coluna-titulo\">Balcão 2 · Busca com LAYA</div>\n      <div class=\"ds-coluna-sub\">inteligência local</div>\n    </div>\n    <div class=\"ds-coluna-legend\">\n      <div class=\"ds-legend-text\">Resultados por inteligência local.</div>\n      <div class=\"ds-legend-items\">\n        <span class=\"ds-legend-item\">\n          <span class=\"ds-legend-swatch\" style=\"background:#4a7c59\"></span>\n          Encontrado em ambos\n        </span>\n        <span class=\"ds-legend-item\">\n          <span class=\"ds-legend-swatch\" style=\"background:#b85c38\"></span>\n          Apenas no LAYA\n        </span>\n      </div>\n    </div>\n    <div class=\"ds-grid\" id=\"grid-laya\"></div>\n  </div>\n</div>",
+      "css": ".ds-column-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }\n.ds-coluna { background: #fffef5; border: 1px solid #d6c9b1; padding: 16px; box-shadow: 4px 4px 0 rgba(42,34,24,0.08); }\n.ds-coluna-header { font-family: \"Bricolage Grotesque\", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px; color: #6b5e4f; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #d6c9b1; }\n.ds-coluna-sub { font-size: 12px; color: #6b5e4f; margin-top: 2px; }\n.ds-coluna-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; font-size: 11px; color: #6b5e4f; text-transform: uppercase; letter-spacing: 0.08em; }\n.ds-legend-item { display: inline-flex; align-items: center; gap: 6px; }\n.ds-legend-swatch { display: inline-block; width: 10px; height: 10px; border: 1px solid #d6c9b1; }\n.ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }"
+    },
+    {
+      "name": "Sidebar Catalog",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Fixed sidebar catalog with department groups and product tiles",
+      "html": "<aside class=\"ds-catalog-sidebar\">\n  <div class=\"ds-catalog-sidebar-header\">\n    <div class=\"ds-catalog-sidebar-title\">CATÁLOGO</div>\n    <div class=\"ds-catalog-sidebar-sub\">120 artigos</div>\n  </div>\n  <div class=\"ds-catalog-sidebar-content\">\n    <div class=\"ds-categoria-group\">\n      <div class=\"ds-categoria-title\">jardim</div>\n      <div class=\"ds-grid\">\n        <div class=\"ds-tile-small\">\n          <div class=\"ds-tile-small-id\">p001</div>\n          <div class=\"ds-tile-small-nome\">Vaso de cacto</div>\n          <div class=\"ds-tile-small-preco\">R$ 29,99</div>\n        </div>\n      </div>\n    </div>\n  </div>\n</aside>",
+      "css": ".ds-catalog-sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background: #fdf6e3; border-right: 2px solid #d6c9b1; overflow-y: auto; z-index: 100; padding: 16px; }\n.ds-catalog-sidebar-header { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #d6c9b1; }\n.ds-catalog-sidebar-title { font-family: \"Bricolage Grotesque\", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px; color: #6b5e4f; }\n.ds-catalog-sidebar-sub { font-size: 12px; color: #6b5e4f; margin-top: 2px; }\n.ds-categoria-group { margin-bottom: 14px; }\n.ds-categoria-title { font-family: \"Bricolage Grotesque\", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; color: #6b5e4f; margin-bottom: 6px; border-bottom: 1px dashed #d6c9b1; padding-bottom: 3px; }\n.ds-catalog-sidebar .ds-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 6px; }\n.ds-tile-small { background: #e8e3d6; border: 1px solid #d6c9b1; padding: 6px; font-size: 10px; }\n.ds-tile-small-id { font-size: 9px; color: #6b5e4f; }\n.ds-tile-small-nome { font-size: 10px; -webkit-line-clamp: 2; overflow: hidden; }\n.ds-tile-small-preco { font-size: 10px; font-weight: 700; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action button used for search and submissions",
+      "html": "<button class=\"ds-btn-primary\">Buscar</button>",
+      "css": ".ds-btn-primary { padding: 14px 22px; background: #b85c38; color: #fff; border: 2px solid #b85c38; font-family: \"Bricolage Grotesque\", sans-serif; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; }\n.ds-btn-primary:hover { background: #9a4a2c; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "1970s Department Catalog",
+    "overview": "A tactile, paper-driven interface that feels like flipping through a vintage department store catalog — warm cream surfaces, bold uppercase labels, and hard-offset shadows that give each card a physical presence on the page. The design treats the 120-product catalog as a literal shelf: square tiles, department groups, and a persistent sidebar grid keep the inventory visible at all times.",
+    "keyCharacteristics": [
+      "Warm paper palette with terracotta accent and forest green secondary",
+      "Hard-offset shadows, never soft blur",
+      "Square catalog tiles with level-based color grading (lv0–lv3)",
+      "Side-by-side comparison columns with semantic source borders",
+      "Persistent left catalog sidebar, mobile: stacked"
+    ],
+    "rules": [
+      {
+        "name": "The Source-Color Rule",
+        "body": "Border-left color on tiles is semantic, not decorative: green = found in both searches, blue = keyword-only, terracotta = LAYA-only. Removing these borders destroys the comparison mechanic.",
+        "section": "colors"
+      },
+      {
+        "name": "The Level-Heat Rule",
+        "body": "Tile background shifts from cool gray (lv0) through warm cream (lv1) to amber (lv2) and terracotta-accented (lv3) — higher score = warmer surface. Never invert: lv0 must be the coolest, lv3 the warmest.",
+        "section": "components"
+      },
+      {
+        "name": "The Hard Shadow Rule",
+        "body": "The 4px offset shadow is the system's depth language. Soft blur shadows would read as generic/material and break the catalog identity. Zero-offset colored halos are decoration — banned.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Catalog Label Rule",
+        "body": "Every uppercase tracked label is a catalog artifact — selo, exemplos-label, categoria-title, contador-titulo. Keep them short (1–2 words) and always uppercase with letter-spacing.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do preserve the 2-column comparison layout — it is the product's core mechanic",
+      "Do keep the sidebar catalog visible at all times; it contextualizes every search",
+      "Do use the source-border colors (OK/green, keyword/blue, terracotta) consistently on tiles in both columns",
+      "Do maintain the hard 4px shadow vocabulary across all cards",
+      "Do use Bricolage Grotesque for all uppercase labels and the hero title"
+    ],
+    "donts": [
+      "Don't introduce rounded corners on cards or buttons — zero radius is the identity",
+      "Don't replace the hard offset shadow with soft blur or layered shadows",
+      "Don't add gradient text, glass effects, or backdrop-filter decoration",
+      "Don't use emoji as icon substitutes — the system uses text labels and semantic colors",
+      "Don't hide the catalog sidebar on desktop — it's always open (catalog-open class)"
+    ]
+  }
+}
