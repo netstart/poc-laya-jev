@@ -10,6 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=Figtree:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
+  <aside class="catalog-sidebar" id="catalogSidebar">
+    <div class="catalog-sidebar-header">
+      <div class="catalog-sidebar-title">CATÁLOGO</div>
+      <div class="catalog-sidebar-sub" id="catalogSidebarSub"></div>
+    </div>
+    <div class="catalog-sidebar-content" id="catalogSidebarContent"></div>
+  </aside>
+
   <div class="capa">
     <div class="capa-inner">
       <div class="selo">CATÁLOGO GERAL · 120 ARTIGOS</div>
@@ -49,9 +57,12 @@
           <div class="coluna-sub">tradicional</div>
         </div>
         <div class="coluna-legend">
-          <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Ambos</span>
-          <span class="legend-item"><span class="legend-swatch" style="background:#4a6fa5"></span> Apenas keyword</span>
-          <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas LAYA</span>
+          <div class="legend-text">Resultados por correspondência de palavras. Nenhuma compreensão de intenção, contexto ou orçamento.</div>
+          <div class="legend-items">
+            <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Encontrado em ambos</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#4a6fa5"></span> Apenas na busca tradicional</span>
+          </div>
+          <div class="legend-note">Números = ordem de relevância por frequência de termos</div>
         </div>
         <div class="grid" id="grid-keyword"></div>
       </div>
@@ -61,9 +72,18 @@
           <div class="coluna-sub">inteligência local</div>
         </div>
         <div class="coluna-legend">
-          <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Ambos</span>
-          <span class="legend-item"><span class="legend-swatch" style="background:#4a6fa5"></span> Apenas keyword</span>
-          <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas LAYA</span>
+          <div class="legend-text">Resultados por inteligência local, considerando intenção, contexto e orçamento quando possível.</div>
+          <div class="legend-items">
+            <span class="legend-item"><span class="legend-swatch" style="background:var(--ok)"></span> Encontrado em ambos</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:var(--accent)"></span> Apenas no LAYA</span>
+          </div>
+          <div class="legend-levels">
+            <span class="legend-level"><span class="legend-swatch lv0"></span> lv0</span>
+            <span class="legend-level"><span class="legend-swatch lv1"></span> lv1</span>
+            <span class="legend-level"><span class="legend-swatch lv2"></span> lv2</span>
+            <span class="legend-level"><span class="legend-swatch lv3"></span> lv3</span>
+          </div>
+          <div class="legend-note">Números = posição no ranking LAYA · Fundo = nível de score (lv0–lv3)</div>
         </div>
         <div class="grid" id="grid-laya"></div>
       </div>
@@ -82,19 +102,6 @@
       </div>
       <div class="inspector-body" id="inspectorBody"></div>
     </div>
-
-    <div class="catalog-trigger">
-      <button id="catalogBtn">Ver catálogo completo</button>
-    </div>
-
-    <div class="catalog-full" id="catalogFull" style="display:none">
-      <div class="catalog-header">
-        <div class="catalog-title">Catálogo Completo</div>
-        <div class="catalog-sub">120 artigos</div>
-      </div>
-      <div class="grid catalog-grid" id="catalogGrid"></div>
-    </div>
-  </div>
 
   <script src="keyword.js"></script>
   <script src="app.js"></script>

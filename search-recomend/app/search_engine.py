@@ -51,7 +51,7 @@ class SearchEngine:
 
         scores_list = self.laya.score_products(q, self.productos)
         scores = {sp.producto_id: sp for sp in scores_list}
-        ordem = [p.id for p in rank_productos(self.productos, scores, orcamento_max)]
+        ordem = [p.id for p in rank_productos(self.productos, scores, orcamento_max) if p.id in scores and scores[p.id].score > 0]
 
         n_chamadas = 1 + (len(self.productos) + 23) // 24
         latency = int((time.time() - t0) * 1000)

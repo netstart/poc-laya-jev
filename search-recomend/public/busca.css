@@ -238,41 +238,93 @@ body {
   font-size: 12px;
 }
 
-.catalog-trigger { text-align: center; margin: 18px 0; }
-.catalog-trigger button {
-  background: var(--paper);
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  cursor: pointer;
-  font-family: "Bricolage Grotesque", sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.catalog-trigger button:hover { border-color: var(--accent); }
-
-.catalog-full {
-  background: var(--paper);
-  border: 1px solid var(--border);
+.catalog-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: var(--bg);
+  border-right: 2px solid var(--border);
+  overflow-y: auto;
+  z-index: 100;
   padding: 16px;
-  margin-top: 12px;
 }
-.catalog-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+.catalog-sidebar-header {
   margin-bottom: 12px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
-.catalog-title {
+.catalog-sidebar-title {
   font-family: "Bricolage Grotesque", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 13px;
   color: var(--muted);
 }
-.catalog-sub { font-size: 12px; color: var(--muted); }
-.catalog-grid { margin-top: 0; }
+.catalog-sidebar-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.catalog-sidebar-content .categoria-group {
+  margin-bottom: 14px;
+}
+.catalog-sidebar-content .categoria-title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 3px;
+}
+.catalog-sidebar .grid {
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 6px;
+}
+.catalog-sidebar .tile {
+  background: #e8e3d6;
+  border: 1px solid var(--border);
+  padding: 6px;
+  font-size: 10px;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+.catalog-sidebar .tile .tile-id {
+  font-size: 9px;
+}
+.catalog-sidebar .tile .tile-nome {
+  font-size: 10px;
+  -webkit-line-clamp: 2;
+}
+.catalog-sidebar .tile .tile-preco {
+  font-size: 10px;
+}
+
+body.catalog-open .capa {
+  margin-left: 260px;
+}
+body.catalog-open .resultados {
+  margin-left: 260px;
+}
+
+@media (max-width: 640px) {
+  .catalog-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 2px solid var(--border);
+  }
+  body.catalog-open .capa,
+  body.catalog-open .resultados {
+    margin-left: 0;
+  }
+  .catalog-sidebar .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 .over-budget {
   background: var(--paper);

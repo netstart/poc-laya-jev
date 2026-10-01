@@ -24,6 +24,8 @@ async function init() {
     list.appendChild(btn);
   });
   ks = new KeywordSearch(catalogo);
+  renderSidebarCatalog();
+  document.body.classList.add("catalog-open");
 }
 
 function debounce(fn, ms) {
@@ -70,6 +72,7 @@ function createNeutralTile(producto) {
   const div = document.createElement("div");
   div.className = "tile";
   div.title = "";
+  div.id = `tile-sidebar-${producto.id}`;
   let html = `<div class="tile-id">${producto.id}</div>`;
   html += `<div class="tile-nome">${producto.nombre}</div>`;
   html += `<div class="tile-preco">R$ ${producto.precio.toFixed(2)}</div>`;
@@ -77,28 +80,33 @@ function createNeutralTile(producto) {
   return div;
 }
 
-function renderFullCatalog() {
-  const grid = document.getElementById("catalogGrid");
-  grid.innerHTML = "";
+function renderSidebarCatalog() {
+  const content = document.getElementById("catalogSidebarContent");
+  const sub = document.getElementById("catalogSidebarSub");
+  if (!content) return;
+  if (sub) sub.textContent = `${catalogo.length} artigos`;
+  content.innerHTML = "";
+  const categories = {};
   catalogo.forEach(p => {
-    grid.appendChild(createNeutralTile(p));
+    if (!categories[p.categoria]) categories[p.categoria] = [];
+    categories[p.categoria].push(p);
+  });
+  Object.keys(categories).sort().forEach(cat => {
+    const group = document.createElement("div");
+    group.className = "categoria-group";
+    const title = document.createElement("div");
+    title.className = "categoria-title";
+    title.textContent = cat;
+    group.appendChild(title);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    categories[cat].forEach(p => {
+      grid.appendChild(createNeutralTile(p));
+    });
+    group.appendChild(grid);
+    content.appendChild(group);
   });
 }
-
-let catalogVisible = false;
-document.getElementById("catalogBtn").addEventListener("click", () => {
-  catalogVisible = !catalogVisible;
-  const btn = document.getElementById("catalogBtn");
-  const container = document.getElementById("catalogFull");
-  if (catalogVisible) {
-    renderFullCatalog();
-    container.style.display = "block";
-    btn.textContent = "Ocultar catálogo completo";
-  } else {
-    container.style.display = "none";
-    btn.textContent = "Ver catálogo completo";
-  }
-});
 
 async function doSearch(q) {
   currentQuery = q;

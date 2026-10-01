@@ -29,6 +29,14 @@ Local: coluna direita, logo abaixo do título da coluna.
 - **Números/badges**: indicam o ranking do LAYA entre os primeiros resultados considerados.
 - **Níveis `lv0` a `lv3`**: representam faixas de score do LAYA, do mais baixo ao mais alto.
 
+### 4.3 Legenda das Cores
+| Nível | Cor de Fundo (Hex) | Faixa de score               |
+|-------|-------------------|------------------------------|
+| lv0   | #ece8dc           | Faixa de score mais baixa.   |
+| lv1   | #f5edd8           | Faixa de score intermediária.|
+| lv2   | #fbe8c8           | Faixa de score intermediária.|
+| lv3   | #fad2a0           | Faixa de score mais alta.    |
+
 ## 5. SIGNIFICADO DAS CORES
 - **Borda esquerda verde**: item encontrado tanto pela busca tradicional quanto pelo LAYA.
 - **Borda esquerda azul**: item encontrado apenas pela busca tradicional.
