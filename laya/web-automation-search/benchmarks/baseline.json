@@ -1,0 +1,88 @@
+{
+  "benchmark_version": "1.0.0",
+  "date": "2026-10-08",
+  "description": "Baseline de performance para LAYA UltraFast Web Automation Agent",
+  "hardware_spec": {
+    "cpu": "Intel Core i7-12700H",
+    "ram": "32GB DDR4",
+    "storage": "SSD NVMe",
+    "os": "Ubuntu 22.04 LTS"
+  },
+  "software_spec": {
+    "python": "3.11.7",
+    "ollama": "0.3.5",
+    "model": "llama3.1:8b-instruct-q4_K_M",
+    "playwright": "1.47.0",
+    "chrome": "120.0.6099.109"
+  },
+  "baseline": {
+    "search": {
+      "name": "Wikipedia Search",
+      "description": "Acesse https://wikipedia.org e pesquise por 'LAYA automação'",
+      "p50_latency_ms": 450,
+      "p95_latency_ms": 620,
+      "p99_latency_ms": 780,
+      "throughput_actions_per_min": 45,
+      "peak_memory_mb": 320,
+      "steady_state_memory_mb": 280,
+      "snapshot_js_duration_ms": 15,
+      "success_rate": 1.0
+    },
+    "form_filling": {
+      "name": "Form Filling",
+      "description": "Preencha o formulário de contato com nome, email e mensagem",
+      "p50_latency_ms": 520,
+      "p95_latency_ms": 710,
+      "p99_latency_ms": 850,
+      "throughput_actions_per_min": 38,
+      "peak_memory_mb": 350,
+      "steady_state_memory_mb": 310,
+      "snapshot_js_duration_ms": 18,
+      "success_rate": 0.95
+    },
+    "navigation": {
+      "name": "Multi-page Navigation",
+      "description": "Navegue da home do GitHub para a página de trending e depois para um repositório",
+      "p50_latency_ms": 480,
+      "p95_latency_ms": 660,
+      "p99_latency_ms": 820,
+      "throughput_actions_per_min": 42,
+      "peak_memory_mb": 330,
+      "steady_state_memory_mb": 290,
+      "snapshot_js_duration_ms": 16,
+      "success_rate": 1.0
+    },
+    "dynamic_content": {
+      "name": "Dynamic Content (AJAX)",
+      "description": "Aguarde carregar resultados de busca e clique no primeiro resultado",
+      "p50_latency_ms": 550,
+      "p95_latency_ms": 750,
+      "p99_latency_ms": 900,
+      "throughput_actions_per_min": 35,
+      "peak_memory_mb": 340,
+      "steady_state_memory_mb": 300,
+      "snapshot_js_duration_ms": 20,
+      "success_rate": 0.90
+    },
+    "heavy_dom": {
+      "name": "Heavy DOM (>2000 elements)",
+      "description": "Encontre e clique no link 'Documentation' no final da página pesada",
+      "p50_latency_ms": 580,
+      "p95_latency_ms": 790,
+      "p99_latency_ms": 950,
+      "throughput_actions_per_min": 32,
+      "peak_memory_mb": 380,
+      "steady_state_memory_mb": 340,
+      "snapshot_js_duration_ms": 25,
+      "success_rate": 0.85
+    }
+  },
+  "targets": {
+    "snapshot_to_action_latency_p95_ms": 800,
+    "throughput_actions_per_min": 40,
+    "steady_state_memory_mb": 500,
+    "cold_start_s": 3.0,
+    "snapshot_js_duration_ms": 50,
+    "success_rate_min": 0.9
+  }
+}

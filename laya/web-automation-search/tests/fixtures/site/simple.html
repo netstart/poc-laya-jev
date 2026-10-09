@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Simples de Teste - LAYA</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        .loading {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Page de Teste LAYA</h1>
+        
+        <div class="section">
+            <h2>Seção 1: Botões</h2>
+            <button id="btn-primary" type="button">Botão Primário</button>
+            <button id="btn-secondary" type="button" disabled>Botão Desabilitado</button>
+            <button class="btn-link" onclick="handleClick('link-btn')" type="button">Botão Link</button>
+        </div>
+        
+        <div class="section">
+            <h2>Seção 2: Forms</h2>
+            <form id="contact-form">
+                <input type="text" id="name-input" name="name" placeholder="Seu nome" required>
+                <input type="email" id="email-input" name="email" placeholder="Seu email" required>
+                <select id="country-select" name="country">
+                    <option value="">Selecione um país</option>
+                    <option value="br">Brasil</option>
+                    <option value="pt">Portugal</option>
+                    <option value="mx">México</option>
+                </select>
+                <textarea id="message-input" name="message" rows="4" placeholder="Sua mensagem"></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+        
+        <div class="section">
+            <h2>Seção 3: Navegação</h2>
+            <button id="toggle-content" type="button">Alternar Conteúdo</button>
+            <button id="show-modal" type="button">Abrir Modal</button>
+            <div id="dynamic-content" class="hidden">
+                <p>Este conteúdo é carregado dinamicamente.</p>
+                <a href="/page2" id="next-page">Página 2</a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Seção 4: Links</h2>
+            <a href="https://example.com" id="external-link">Link Externo</a>
+        </div>
+    </div>
+    
+    <script>
+        function handleClick(id) {
+            console.log('Clicked:', id);
+            document.getElementById(id).textContent = 'Cliqueado!';
+        }
+        
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name-input').value;
+            alert('Formulário enviado para: ' + name);
+        });
+        
+        document.getElementById('toggle-content').addEventListener('click', function() {
+            const content = document.getElementById('dynamic-content');
+            content.classList.toggle('hidden');
+        });
+        
+        document.getElementById('show-modal').addEventListener('click', function() {
+            alert('Modal abertp');
+        });
+    </script>
+</body>
+</html>

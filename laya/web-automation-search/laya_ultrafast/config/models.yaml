@@ -1,0 +1,88 @@
+# LAYA Model Registry
+# Define supported models with their recommended parameters
+
+models:
+  # --- Ollama Models ---
+  - name: "llama3.1:8b-instruct-q4_K_M"
+    provider: "ollama"
+    context_window: 131072
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "q4_K_M"
+    description: "Llama 3.1 8B Instruct - balanced quality/speed, 4-bit quantized"
+
+  - name: "llama3.1:70b-instruct-q4_K_M"
+    provider: "ollama"
+    context_window: 131072
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "q4_K_M"
+    description: "Llama 3.1 70B Instruct - high quality, requires ~48GB RAM"
+
+  - name: "mistral:7b-instruct-q4_K_M"
+    provider: "ollama"
+    context_window: 32768
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "q4_K_M"
+    description: "Mistral 7B Instruct - fast, good for structured output"
+
+  - name: "phi3:mini-instruct-4k-q4"
+    provider: "ollama"
+    context_window: 4096
+    max_output: 4096
+    recommended_temperature: 0.1
+    quantization: "q4"
+    description: "Phi-3 Mini - very fast, small context, good for simple tasks"
+
+  - name: "qwen2.5:7b-instruct-q4_K_M"
+    provider: "ollama"
+    context_window: 32768
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "q4_K_M"
+    description: "Qwen 2.5 7B - strong multilingual, good structured output"
+
+  # --- OpenAI-compatible (vLLM, LocalAI, etc.) ---
+  - name: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    provider: "openai"
+    context_window: 131072
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "auto"
+    description: "Llama 3.1 8B via vLLM/OpenAI-compatible endpoint"
+
+  - name: "mistralai/Mistral-7B-Instruct-v0.3"
+    provider: "openai"
+    context_window: 32768
+    max_output: 8192
+    recommended_temperature: 0.1
+    quantization: "auto"
+    description: "Mistral 7B Instruct v0.3 via vLLM/OpenAI-compatible endpoint"
+
+  # --- Llama.cpp / GGUF ---
+  - name: "llama-3.1-8b-instruct-q4_k_m.gguf"
+    provider: "local"
+    context_window: 8192
+    max_output: 4096
+    recommended_temperature: 0.1
+    quantization: "q4_k_m"
+    description: "Llama 3.1 8B GGUF for llama.cpp server"
+
+# Provider-specific defaults
+defaults:
+  ollama:
+    base_url: "http://localhost:11434/v1"
+    timeout_ms: 60000
+  openai:
+    base_url: "http://localhost:8000/v1"
+    timeout_ms: 60000
+  local:
+    base_url: "http://localhost:8080"
+    timeout_ms: 60000
+
+# Fallback chain (used when primary model fails)
+fallback_chain:
+  - "phi3:mini-instruct-4k-q4"
+  - "mistral:7b-instruct-q4_K_M"
+  - "llama3.1:8b-instruct-q4_K_M"
