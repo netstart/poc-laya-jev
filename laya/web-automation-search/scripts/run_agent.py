@@ -47,9 +47,9 @@ Exemplos:
     parser.add_argument("--task-file", "-t", help="Arquivo JSON com múltiplos objetivos")
     parser.add_argument("--verbose", "-v", action="store_true", help="Habilita logging detalhado")
     parser.add_argument("--debug", "-d", action="store_true", help="Habilita debug adicional")
-    parser.add_argument("--model", help="Override do modelo (ex: llama3.1:8b-instruct-q4_K_M)")
+    parser.add_argument("--model", help="Override do modelo (ex: default para modo heurístico)")
     parser.add_argument(
-        "--provider", choices=["ollama", "openai", "local"], help="Override do provedor"
+        "--provider", choices=["openai", "local"], help="Override do provedor (default: local)"
     )
     parser.add_argument(
         "--headless",

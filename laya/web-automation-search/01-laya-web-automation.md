@@ -194,10 +194,12 @@ laya-ultrafast/
 ## 5. Configuração (`.env.example`)
 
 ```bash
-# Modelo Local (Ollama padrão)
-LAYA_MODEL_PROVIDER=ollama
-LAYA_MODEL_NAME=llama3.1:8b-instruct-q4_K_M
-LAYA_MODEL_ENDPOINT=http://localhost:11434/v1
+# Modelo Local (heurístico embutido)
+# O LAYA roda completamente offline, sem dependência de LLM externo nem Ollama.
+# Para uso com modelo LLM real, altere LAYA_MODEL_PROVIDER para "ollama" e instale Ollama.
+LAYA_MODEL_PROVIDER=local
+LAYA_MODEL_NAME=default
+LAYA_MODEL_ENDPOINT=http://localhost:11434
 LAYA_MODEL_TEMPERATURE=0.1
 LAYA_MODEL_MAX_TOKENS=512
 LAYA_MODEL_NUM_CTX=4096

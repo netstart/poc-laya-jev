@@ -10,8 +10,7 @@
   },
   "software_spec": {
     "python": "3.11.7",
-    "ollama": "0.3.5",
-    "model": "llama3.1:8b-instruct-q4_K_M",
+    "model": "heuristic-local",
     "playwright": "1.47.0",
     "chrome": "120.0.6099.109"
   },

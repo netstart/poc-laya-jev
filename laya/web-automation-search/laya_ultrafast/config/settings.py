@@ -39,15 +39,14 @@ class LAYAConfig(BaseSettings):
 
     # --- Modelo Local ---
     model_provider: ModelProvider = Field(
-        default="ollama", description="Provedor do modelo local para inferência"
+        default="local", description="Provedor do modelo local (heurístico embutido)"
     )
     model_name: str = Field(
-        default="llama3.1:8b-instruct-q4_K_M",
-        description="Nome do modelo ou caminho para o modelo GGUF",
+        default="default",
+        description="Nome do modelo heurístico embutido (não requer inferência de LLM)",
     )
     model_endpoint: str = Field(
-        default="http://localhost:11434/v1",
-        description="URL do endpoint do provedor do modelo (OpenAI-compatível)",
+        default="http://localhost:8080", description="URL do endpoint do modelo local (modo heurístico)"
     )
     model_temperature: float = Field(
         default=0.1,
@@ -207,12 +206,14 @@ class LAYAConfig(BaseSettings):
         if provider is None:
             provider = cls().model_provider
 
+        # Modo heurístico: não usa endpoint de modelo LLM
+        if provider == "local":
+            return "http://localhost:8080"  # Placeholder - modelo heurístico não usa endpoint
+        # Para provedores OpenAI-compatíveis
         defaults = {
-            "ollama": "http://localhost:11434/v1",
             "openai": "http://localhost:8000/v1",
-            "local": "http://localhost:8080",
         }
-        return cls().model_endpoint or defaults.get(provider, defaults["ollama"])
+        return cls().model_endpoint or defaults.get(provider, "")
 
 
 @lru_cache(maxsize=1)

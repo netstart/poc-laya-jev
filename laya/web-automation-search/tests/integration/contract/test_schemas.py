@@ -76,10 +76,10 @@ class TestAgentAction:
 class TestModelFactory:
     """Testes para factory de modelos."""
 
-    def test_create_ollama_client(self):
-        config = LAYAConfig(model_provider="ollama", model_name="llama3.1:8b-instruct-q4_K_M")
+    def test_create_local_client(self):
+        config = LAYAConfig(model_provider="local", model_name="default")
         client = create_model_client(config)
-        assert client.__class__.__name__ == "OllamaClient"
+        assert client.__class__.__name__ == "LlamaCppClient"
 
     def test_create_openai_client(self):
         config = LAYAConfig(model_provider="openai", model_name="gpt-4")
@@ -92,7 +92,7 @@ class TestModelFactory:
         assert client.__class__.__name__ == "LlamaCppClient"
 
     def test_invalid_provider_raises(self):
-        config = LAYAConfig(model_provider="ollama", model_name="test")
+        config = LAYAConfig(model_provider="invalid_provider", model_name="test")
         config.__dict__["model_provider"] = "invalid_provider"
         with pytest.raises(Exception):
             create_model_client(config)
@@ -103,8 +103,8 @@ class TestSettings:
 
     def test_default_config(self):
         config = LAYAConfig()
-        assert config.model_provider == "ollama"
-        assert config.model_name == "llama3.1:8b-instruct-q4_K_M"
+        assert config.model_provider == "local"
+        assert config.model_name == "default"
         assert config.max_steps == 25
         assert config.browser_headless is True
 

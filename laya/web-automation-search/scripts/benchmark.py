@@ -227,7 +227,7 @@ async def main():
     parser.add_argument("--output", "-o", help="Arquivo JSON para salvar resultados")
     parser.add_argument("--model", help="Override do modelo")
     parser.add_argument(
-        "--provider", choices=["ollama", "openai", "local"], help="Override do provedor"
+        "--provider", choices=["openai", "local"], help="Override do provedor"
     )
     parser.add_argument(
         "--headless",
